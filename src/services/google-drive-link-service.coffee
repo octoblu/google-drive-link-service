@@ -2,7 +2,7 @@ MeshbluHttp = require 'meshblu-http'
 request     = require 'request'
 moment      = require 'moment'
 
-class googleDriveLinkService
+class GoogleDriveLinkService
   constructor: ({@meshbluConfig}) ->
 
   generate: ({token,downloadUrl,fileName}, callback) =>
@@ -39,4 +39,4 @@ class googleDriveLinkService
     error.code = code if code?
     return error
 
-module.exports = googleDriveLinkService
+module.exports = GoogleDriveLinkService

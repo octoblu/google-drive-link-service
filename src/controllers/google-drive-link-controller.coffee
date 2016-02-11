@@ -1,4 +1,4 @@
-class googleDriveLinkController
+class GoogleDriveLinkController
   constructor: ({@googleDriveLinkService}) ->
 
   generate: (request, response) =>
@@ -18,4 +18,4 @@ class googleDriveLinkController
       return response.status(error.code || 500).send(error: error.message) if error?
       requestStream.pipe response
 
-module.exports = googleDriveLinkController
+module.exports = GoogleDriveLinkController
