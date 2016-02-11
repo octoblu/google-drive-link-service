@@ -25,8 +25,7 @@ describe 'Download', ->
       port: 0xd00d
       privateKey: @privateKey
 
-    @googleDriveServiceUri = "http://localhost:#{0xbabe}"
-    @server = new Server serverOptions, {meshbluConfig,@googleDriveServiceUri}
+    @server = new Server serverOptions, {meshbluConfig}
 
     @server.run =>
       @serverPort = @server.address().port
@@ -51,10 +50,10 @@ describe 'Download', ->
           uuid: 'one-time-device-uuid'
           googleDrive:
             encryptedToken: @privateKeyObj.encrypt 'oh-this-is-my-bearer-token', 'base64'
-            encryptedFileId: @privateKeyObj.encrypt 'file-id', 'base64'
+            encryptedDownloadUrl: @privateKeyObj.encrypt "http://localhost:#{0xbabe}/some-crazy-url", 'base64'
 
       @downloadLink = @googleDrive
-        .get "/files/file-id"
+        .get '/some-crazy-url'
         .set 'Authorization', 'Bearer oh-this-is-my-bearer-token'
         .reply 200, '{"some-data":true}'
 

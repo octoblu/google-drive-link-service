@@ -10,7 +10,7 @@ Router             = require './router'
 GoogleDriveLinkService = require './services/google-drive-link-service'
 
 class Server
-  constructor: ({@disableLogging, @port}, {@meshbluConfig,@googleDriveServiceUri})->
+  constructor: ({@disableLogging, @port}, {@meshbluConfig})->
     @meshbluConfig ?= new MeshbluConfig().toJSON()
 
   address: =>
@@ -27,7 +27,7 @@ class Server
 
     app.options '*', cors()
 
-    googleDriveLinkService = new GoogleDriveLinkService {@meshbluConfig,@googleDriveServiceUri}
+    googleDriveLinkService = new GoogleDriveLinkService {@meshbluConfig}
 
     router = new Router {googleDriveLinkService,@meshbluConfig}
 

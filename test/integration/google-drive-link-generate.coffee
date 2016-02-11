@@ -37,30 +37,63 @@ describe 'Generate', ->
     @meshblu.close done
 
   describe 'On POST /google-drive/links', ->
-    beforeEach (done) ->
-      @registerDevice = @meshblu
-        .post '/devices'
-        .reply 201,
-          uuid: 'one-time-device-uuid'
-          token: 'one-time-device-token'
+    describe 'when bearer method is used', ->
+      beforeEach (done) ->
+        @registerDevice = @meshblu
+          .post '/devices'
+          .reply 201,
+            uuid: 'one-time-device-uuid'
+            token: 'one-time-device-token'
 
-      options =
-        uri: '/google-drive/links/file-id'
-        baseUrl: "http://localhost:#{@serverPort}"
-        auth:
-          bearer: 'oh-this-is-my-bearer-token'
-        json:
-          fileName: 'File Name'
+        options =
+          uri: '/google-drive/links'
+          baseUrl: "http://localhost:#{@serverPort}"
+          auth:
+            bearer: 'oh-this-is-my-bearer-token'
+          json:
+            fileName: 'File Name'
+            downloadUrl: 'http://some-crazy-url'
 
-      request.post options, (error, @response, @body) =>
-        done error
+        request.post options, (error, @response, @body) =>
+          done error
 
-    it 'should register the device', ->
-      @registerDevice.done()
+      it 'should return a 201', ->
+        expect(@response.statusCode).to.equal 201
 
-    it 'should return a 201', ->
-      expect(@response.statusCode).to.equal 201
+      it 'should register the device', ->
+        @registerDevice.done()
 
-    it 'should respond with the link', ->
-      expect(@body.link).to.equal 'https://one-time-device-uuid:one-time-device-token@google-drive-link.octoblu.com/meshblu/links'
-      expect(@body.fileName).to.equal 'File Name'
+      it 'should respond with the link', ->
+        expect(@body.link).to.equal 'https://one-time-device-uuid:one-time-device-token@google-drive-link.octoblu.com/meshblu/links'
+        expect(@body.fileName).to.equal 'File Name'
+
+
+    describe 'when access_token_query method is used',->
+      beforeEach (done) ->
+        @registerDevice = @meshblu
+          .post '/devices'
+          .reply 201,
+            uuid: 'one-time-device-uuid'
+            token: 'one-time-device-token'
+
+        options =
+          uri: '/google-drive/links'
+          baseUrl: "http://localhost:#{@serverPort}"
+          qs:
+            access_token: 'oh-this-is-my-bearer-token'
+          json:
+            fileName: 'File Name'
+            downloadUrl: 'http://some-crazy-url'
+
+        request.post options, (error, @response, @body) =>
+          done error
+
+      it 'should return a 201', ->
+        expect(@response.statusCode).to.equal 201
+
+      it 'should register the device', ->
+        @registerDevice.done()
+
+      it 'should respond with the link', ->
+        expect(@body.link).to.equal 'https://one-time-device-uuid:one-time-device-token@google-drive-link.octoblu.com/meshblu/links'
+        expect(@body.fileName).to.equal 'File Name'

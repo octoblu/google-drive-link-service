@@ -3,13 +3,12 @@ class googleDriveLinkController
 
   generate: (request, response) =>
     {token} = request
-    {fileId} = request.params
-    {fileName} = request.body
-    return response.sendStatus(422) unless fileId?
+    {fileName,downloadUrl} = request.body
+    return response.sendStatus(422) unless downloadUrl?
     token ?= request.query.access_token
     return response.sendStatus(422) unless token?
 
-    @googleDriveLinkService.generate {token, fileId, fileName}, (error, body) =>
+    @googleDriveLinkService.generate {token, downloadUrl, fileName}, (error, body) =>
       return response.status(error.code || 500).send(error: error.message) if error?
       response.status(201).send body
 

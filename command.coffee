@@ -8,7 +8,6 @@ class Command
       port:           process.env.PORT || 80
       disableLogging: process.env.DISABLE_LOGGING == "true"
 
-    @googleDriveServiceUri = process.env.BOX_SERVICE_URI || 'https://www.googleapis.com/drive/v3'
     @privateKeyBase64 = process.env.MESHBLU_PRIVATE_KEY_BASE64
 
   panic: (error) =>
@@ -21,7 +20,7 @@ class Command
 
     meshbluConfig = new MeshbluConfig().toJSON()
     meshbluConfig.privateKey = new Buffer(@privateKeyBase64, 'base64').toString('utf8')
-    server = new Server @serverOptions, {meshbluConfig, @googleDriveServiceUri}
+    server = new Server @serverOptions, {meshbluConfig}
     server.run (error) =>
       return @panic error if error?
 

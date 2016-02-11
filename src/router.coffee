@@ -8,7 +8,7 @@ class Router
     app.use '/google-drive', bearerToken()
     app.use '/meshblu', meshbluAuth(@meshbluConfig)
 
-    app.post '/google-drive/links/:fileId', googleDriveLinkController.generate
+    app.post '/google-drive/links', googleDriveLinkController.generate
     app.get '/meshblu/links', googleDriveLinkController.download
     # e.g. app.put '/resource/:id', someController.update
 
