@@ -1,8 +1,9 @@
-http        = require 'http'
-request     = require 'request'
-shmock      = require '@octoblu/shmock'
-MeshbluHttp = require 'meshblu-http'
-Server      = require '../../src/server'
+http          = require 'http'
+request       = require 'request'
+shmock        = require '@octoblu/shmock'
+MeshbluHttp   = require 'meshblu-http'
+enableDestroy = require 'server-destroy'
+Server        = require '../../src/server'
 
 describe 'Download', ->
   before ->
@@ -14,7 +15,9 @@ describe 'Download', ->
 
   beforeEach (done) ->
     @meshblu = shmock 0xd00d
+    enableDestroy @meshblu
     @googleDrive = shmock 0xbabe
+    enableDestroy @googleDrive
 
     serverOptions =
       port: undefined,
@@ -31,14 +34,10 @@ describe 'Download', ->
       @serverPort = @server.address().port
       done()
 
-  afterEach (done) ->
-    @server.stop done
-
-  afterEach (done) ->
-    @meshblu.close done
-
-  afterEach (done) ->
-    @googleDrive.close done
+  afterEach ->
+    @server.destroy()
+    @meshblu.destroy()
+    @googleDrive.destroy()
 
   describe 'On GET /meshblu/links', ->
     beforeEach (done) ->
