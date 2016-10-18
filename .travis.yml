@@ -1,13 +1,6 @@
 language: node_js
 node_js:
   - '5'
-addons:
-  code_climate:
-    repo_token: 182de17e5113431d234798443b389fa24590b77169a456e351dbb45462016304
-before_script:
-  - npm install -g codeclimate-test-reporter
-after_script:
-  - codeclimate-test-reporter < coverage/lcov.info
 deploy:
   provider: npm
   email: serveradmin@octoblu.com
